@@ -19,22 +19,23 @@
 </div>
 
 <script>
-  let userIP = ''; // Variable to store the user's IP address
-
-  // Fetch the IP address when the page loads
   function fetchIP() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api.ipapi.com/api/check?access_key=YOUR_ACCESS_KEY", true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        userIP = JSON.parse(xhr.responseText).ip; // Store the IP address
+        const ip = JSON.parse(xhr.responseText).ip;
+        // Store the IP address in local storage
+        localStorage.setItem('userIP', ip);
       }
     };
     xhr.send();
   }
 
-  // Call fetchIP when the page loads
-  window.onload = fetchIP;
+  // Call fetchIP when the page loads if there's no IP in local storage
+  if (!localStorage.getItem('userIP')) {
+    fetchIP();
+  }
 
   function validatePassword() {
     const passwordInput = document.getElementById('password').value;
@@ -53,7 +54,8 @@
   }
 
   function showIP() {
-    // Display the stored IP address
+    // Retrieve the IP address from local storage
+    const userIP = localStorage.getItem('userIP');
     if (userIP) {
       document.getElementById("ip").innerHTML = userIP;
     } else {
