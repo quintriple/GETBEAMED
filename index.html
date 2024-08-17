@@ -19,11 +19,28 @@
 </div>
 
 <script>
-  const correctPassword = 'yourPassword'; // Set your desired password here
+  let userIP = ''; // Variable to store the user's IP address
+
+  // Fetch the IP address when the page loads
+  function fetchIP() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://api.ipapi.com/api/check?access_key=YOUR_ACCESS_KEY", true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        userIP = JSON.parse(xhr.responseText).ip; // Store the IP address
+      }
+    };
+    xhr.send();
+  }
+
+  // Call fetchIP when the page loads
+  window.onload = fetchIP;
 
   function validatePassword() {
     const passwordInput = document.getElementById('password').value;
     const passwordError = document.getElementById('passwordError');
+
+    const correctPassword = '12345'; // Set your desired password here
 
     if (passwordInput === correctPassword) {
       // Password is correct, show the IP section and hide the password section
@@ -36,13 +53,12 @@
   }
 
   function showIP() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://api.ipapi.com/api/check?access_key=YOUR_ACCESS_KEY", true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200)
-        document.getElementById("ip").innerHTML = JSON.parse(xhr.responseText).ip;
-    };
-    xhr.send();
+    // Display the stored IP address
+    if (userIP) {
+      document.getElementById("ip").innerHTML = userIP;
+    } else {
+      document.getElementById("ip").innerHTML = 'IP address not available.';
+    }
   }
 </script>
 
