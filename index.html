@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Welcome to my website!</h2>
+
+<!-- Password Section -->
+<div id="passwordSection">
+  <label for="password">Enter Password:</label>
+  <input type="password" id="password">
+  <button onclick="validatePassword()">Submit</button>
+  <p id="passwordError" style="color: red;"></p>
+</div>
+
+<!-- Button to Show IP (Initially Hidden) -->
+<div id="ipSection" style="display: none;">
+  <button onclick="showIP()">Dash</button>
+  <p id="ip"></p>
+</div>
+
+<script>
+  const correctPassword = 'yourPassword'; // Set your desired password here
+
+  function validatePassword() {
+    const passwordInput = document.getElementById('password').value;
+    const passwordError = document.getElementById('passwordError');
+
+    if (passwordInput === correctPassword) {
+      // Password is correct, show the IP section and hide the password section
+      document.getElementById('passwordSection').style.display = 'none';
+      document.getElementById('ipSection').style.display = 'block';
+    } else {
+      // Password is incorrect, show an error message
+      passwordError.textContent = 'Incorrect password. Please try again.';
+    }
+  }
+
+  function showIP() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://api.ipapi.com/api/check?access_key=YOUR_ACCESS_KEY", true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200)
+        document.getElementById("ip").innerHTML = JSON.parse(xhr.responseText).ip;
+    };
+    xhr.send();
+  }
+</script>
+
+</body>
+</html>
